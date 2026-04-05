@@ -1,0 +1,24 @@
+# Environment variables - MOST IMPORTANT
+.env
+
+# Virtual environment
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# VS Code settings
+.vscode/
+
+# Python egg
+*.egg-info/
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db

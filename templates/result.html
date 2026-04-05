@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="{{ blog.meta_description if blog else 'AI Generated Blog' }}" />
+    <title>{{ blog.title if blog else 'Blog Result' }} — BlogCraft AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body class="result-page">
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-icon">✦</span>
+                <span class="logo-text">BlogCraft <span class="logo-ai">AI</span></span>
+            </div>
+            <a href="/" class="nav-back-btn">
+                <span>←</span> Generate Another
+            </a>
+        </div>
+    </nav>
+
+    <!-- Result Hero -->
+    <section class="result-hero">
+        <div class="result-hero-bg">
+            <div class="hero-glow glow-1"></div>
+            <div class="hero-glow glow-2"></div>
+        </div>
+        <div class="result-hero-content">
+            <div class="result-badge">
+                <span class="badge-dot"></span>
+                Blog Generated Successfully
+            </div>
+            <h1 class="result-main-title">{{ blog.title }}</h1>
+
+            <!-- Meta Stats -->
+            <div class="blog-meta-stats">
+                <div class="meta-stat">
+                    <span class="meta-icon">📖</span>
+                    <span class="meta-value">{{ blog.word_count }}</span>
+                    <span class="meta-label">Words</span>
+                </div>
+                <div class="meta-divider"></div>
+                <div class="meta-stat">
+                    <span class="meta-icon">🎯</span>
+                    <span class="meta-value">{{ topic }}</span>
+                    <span class="meta-label">Topic</span>
+                </div>
+                <div class="meta-divider"></div>
+                <div class="meta-stat">
+                    <span class="meta-icon">⏱</span>
+                    <span class="meta-value">{{ ((blog.word_count | int) // 200) + 1 }}</span>
+                    <span class="meta-label">Min Read</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Content -->
+    <main class="blog-content-wrapper">
+        <div class="blog-layout">
+
+            <!-- Main Blog Article -->
+            <article class="blog-article">
+
+                <!-- Introduction -->
+                <section class="blog-section" id="introduction">
+                    <div class="section-label">
+                        <span class="section-number">01</span>
+                        <span class="section-name">Introduction</span>
+                    </div>
+                    <div class="section-content">
+                        <p>{{ blog.introduction }}</p>
+                    </div>
+                </section>
+
+                <!-- Body -->
+                <section class="blog-section" id="body">
+                    <div class="section-label">
+                        <span class="section-number">02</span>
+                        <span class="section-name">Main Content</span>
+                    </div>
+                    <div class="section-content body-content">
+                        {{ blog.body | replace('\n', '<br>') | safe }}
+                    </div>
+                </section>
+
+                <!-- Conclusion -->
+                <section class="blog-section" id="conclusion">
+                    <div class="section-label">
+                        <span class="section-number">03</span>
+                        <span class="section-name">Conclusion</span>
+                    </div>
+                    <div class="section-content">
+                        <p>{{ blog.conclusion }}</p>
+                    </div>
+                </section>
+
+            </article>
+
+            <!-- Sidebar -->
+            <aside class="blog-sidebar">
+
+                <!-- Meta Description Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-card-title">
+                        <span>🔍</span> SEO Meta Description
+                    </h3>
+                    <p class="sidebar-card-text">{{ blog.meta_description }}</p>
+                </div>
+
+                <!-- Tags Card -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-card-title">
+                        <span>🏷️</span> Tags
+                    </h3>
+                    <div class="tags-container">
+                        {% for tag in blog.tags %}
+                        <span class="tag-chip">#{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Stats Card -->
+                <div class="sidebar-card stats-card">
+                    <h3 class="sidebar-card-title">
+                        <span>📊</span> Content Stats
+                    </h3>
+                    <div class="stats-list">
+                        <div class="stat-row">
+                            <span class="stat-row-label">Word Count</span>
+                            <span class="stat-row-value">{{ blog.word_count }}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-row-label">Tags</span>
+                            <span class="stat-row-value">{{ blog.tags | length }}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-row-label">Read Time</span>
+                            <span class="stat-row-value">~{{ ((blog.word_count | int) // 200) + 1 }} min</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-row-label">Sections</span>
+                            <span class="stat-row-value">3</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions Card -->
+                <div class="sidebar-card actions-card">
+                    <h3 class="sidebar-card-title">
+                        <span>⚡</span> Actions
+                    </h3>
+                    <button class="action-btn copy-btn" id="copyBtn" onclick="copyBlogContent()">
+                        <span>📋</span> Copy Full Blog
+                    </button>
+                    <a href="/" class="action-btn generate-new-btn">
+                        <span>✦</span> Generate New Blog
+                    </a>
+                </div>
+
+            </aside>
+        </div>
+    </main>
+
+    <!-- Back CTA -->
+    <section class="back-cta">
+        <div class="back-cta-content">
+            <h2>Ready to create another masterpiece?</h2>
+            <p>Generate unlimited blogs, each perfectly crafted for your audience.</p>
+            <a href="/" class="cta-btn">
+                <span>✦</span> Create Another Blog
+                <span>→</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Built with LangChain &amp; Google Gemini &nbsp;·&nbsp; BlogCraft AI &copy; 2025</p>
+    </footer>
+
+    <!-- Hidden content for copying -->
+    <div id="hiddenBlogContent" style="display:none;">
+Title: {{ blog.title }}
+
+Introduction:
+{{ blog.introduction }}
+
+Body:
+{{ blog.body }}
+
+Conclusion:
+{{ blog.conclusion }}
+
+Tags: {{ blog.tags | join(', ') }}
+
+Meta Description: {{ blog.meta_description }}
+
+Word Count: {{ blog.word_count }}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
